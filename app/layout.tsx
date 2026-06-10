@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import SmoothScroll from "@/components/SmoothScroll";
+import BootSequence from "@/components/BootSequence";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +16,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shivam Rathod | Architect of Digital Pathways",
-  description: "Backend & AI/ML Developer specializing in production-ready systems.",
+  title: "Shivam Rathod | AI Systems Engineer",
+  description: "Building intelligent systems, RAG pipelines, and high-concurrency backends. Currently architecting the future of AI automation.",
+  openGraph: {
+    title: "Shivam Rathod | AI Systems Engineer",
+    description: "Production-ready AI/ML systems and backend architecture.",
+    url: "https://your-portfolio-url.vercel.app", // Replace with your final Vercel URL
+    siteName: "Shivam Rathod Portfolio",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -29,8 +39,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        {children}
+        {/* The physics and boot overlays govern the entire application */}
+        <SmoothScroll>
+          <BootSequence />
+          <Navbar />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );

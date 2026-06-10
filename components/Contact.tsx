@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { Send, ExternalLink, Mail } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { Send, ExternalLink, Mail, CheckCircle2, AlertCircle } from "lucide-react";
 
-// --- Custom SVG Brand Icons to replace removed Lucide brand icons ---
+// --- Custom SVG Brand Icons ---
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
     <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
@@ -21,10 +22,28 @@ const XIcon = ({ className }: { className?: string }) => (
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
   </svg>
 );
+
+const MediumIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42c1.87 0 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+  </svg>
+);
 // ----------------------------------------------------------------------
 
 export default function Contact() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const formRef = useRef<HTMLFormElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  // Spotlight Effect Logic
+  const handleMouseMove = (e: React.MouseEvent<HTMLFormElement>) => {
+    if (!formRef.current) return;
+    const rect = formRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,15 +96,28 @@ export default function Contact() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="glass-panel p-8 rounded-2xl flex flex-col gap-6">
-              <div className="grid md:grid-cols-2 gap-6">
+            <form 
+              ref={formRef}
+              onMouseMove={handleMouseMove}
+              onSubmit={handleSubmit} 
+              className="glass-panel p-8 rounded-2xl flex flex-col gap-6 relative overflow-hidden group"
+            >
+              {/* Dynamic Spotlight Glow */}
+              <div 
+                className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(138,43,226,0.1), transparent 40%)`
+                }}
+              />
+
+              <div className="grid md:grid-cols-2 gap-6 relative z-10">
                 <div className="flex flex-col gap-2">
                   <label className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Name</label>
                   <input 
                     type="text" 
                     name="name" 
                     required 
-                    className="bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8A2BE2] transition-colors"
+                    className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8A2BE2] focus:bg-black/80 transition-all"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -94,33 +126,40 @@ export default function Contact() {
                     type="email" 
                     name="email" 
                     required 
-                    className="bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8A2BE2] transition-colors"
+                    className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8A2BE2] focus:bg-black/80 transition-all"
                   />
                 </div>
               </div>
               
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 relative z-10">
                 <label className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Message</label>
                 <textarea 
                   name="message" 
                   rows={5} 
                   required 
-                  className="bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8A2BE2] transition-colors resize-none"
+                  className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8A2BE2] focus:bg-black/80 transition-all resize-none"
                 />
               </div>
 
-              <div className="flex items-center gap-4 mt-2">
-                <button 
+              <div className="flex items-center gap-4 mt-2 relative z-10">
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit" 
-                  disabled={status === "loading"}
-                  className="bg-white text-black font-bold px-8 py-3 rounded-xl hover:bg-zinc-200 transition-colors flex items-center gap-2 disabled:opacity-50"
+                  disabled={status === "loading" || status === "success"}
+                  className={`font-bold px-8 py-3 rounded-xl transition-all flex items-center gap-2 disabled:opacity-80 disabled:cursor-not-allowed
+                    ${status === "success" 
+                      ? "bg-[#34d399] text-black" 
+                      : status === "error" 
+                      ? "bg-red-500 text-white" 
+                      : "bg-white text-black hover:bg-zinc-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                    }`}
                 >
-                  {status === "loading" ? "Transmitting..." : "Send Data"}
-                  <Send className="w-4 h-4" />
-                </button>
-                
-                {status === "success" && <span className="text-[#34d399] text-sm font-medium">Transmission Successful.</span>}
-                {status === "error" && <span className="text-red-400 text-sm font-medium">Transmission Failed. Try again.</span>}
+                  {status === "idle" && <><Send className="w-4 h-4" /> Send Data</>}
+                  {status === "loading" && <><motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, ease: "linear", duration: 1 }}><AlertCircle className="w-4 h-4" /></motion.div> Transmitting...</>}
+                  {status === "success" && <><CheckCircle2 className="w-4 h-4" /> Transmission Successful</>}
+                  {status === "error" && <><AlertCircle className="w-4 h-4" /> Transmission Failed</>}
+                </motion.button>
               </div>
             </form>
           </div>
@@ -129,47 +168,24 @@ export default function Contact() {
           <div className="lg:pl-10 flex flex-col justify-between h-full pt-4">
             <div>
               <h3 className="text-2xl font-bold text-white mb-8">Elsewhere</h3>
-              <ul className="space-y-6">
-                <li>
-                  <a href="mailto:shivamrathod145@gmail.com" className="flex items-center gap-4 text-zinc-400 hover:text-white group transition-colors">
-                    <div className="w-10 h-10 rounded-full glass-panel flex items-center justify-center group-hover:border-[#DAA520]/50 transition-colors">
-                      <Mail className="w-4 h-4 group-hover:text-[#DAA520]" />
-                    </div>
-                    <span className="font-medium">shivamrathod145@gmail.com</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://github.com/shivamr021" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-zinc-400 hover:text-white group transition-colors">
-                    <div className="w-10 h-10 rounded-full glass-panel flex items-center justify-center group-hover:border-[#8A2BE2]/50 transition-colors">
-                      <GithubIcon className="w-4 h-4 group-hover:text-[#8A2BE2]" />
-                    </div>
-                    <span className="font-medium">github.com/shivamr021</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.linkedin.com/in/shivamrathod021" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-zinc-400 hover:text-white group transition-colors">
-                    <div className="w-10 h-10 rounded-full glass-panel flex items-center justify-center group-hover:border-[#34d399]/50 transition-colors">
-                      <LinkedinIcon className="w-4 h-4 group-hover:text-[#34d399]" />
-                    </div>
-                    <span className="font-medium">linkedin.com/in/shivamrathod021</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://x.com/shivamr017" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-zinc-400 hover:text-white group transition-colors">
-                    <div className="w-10 h-10 rounded-full glass-panel flex items-center justify-center group-hover:border-white/50 transition-colors">
-                      <XIcon className="w-4 h-4" />
-                    </div>
-                    <span className="font-medium">x.com/shivamr017</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://codolio.com/profile/shivamr021/card" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-zinc-400 hover:text-white group transition-colors">
-                    <div className="w-10 h-10 rounded-full glass-panel flex items-center justify-center group-hover:border-[#DAA520]/50 transition-colors">
-                      <ExternalLink className="w-4 h-4 group-hover:text-[#DAA520]" />
-                    </div>
-                    <span className="font-medium">Codolio Profile</span>
-                  </a>
-                </li>
+              <ul className="space-y-4">
+                {[
+                  { label: "Email", href: "mailto:shivamrathod145@gmail.com", icon: <Mail className="w-4 h-4" /> },
+                  { label: "GitHub", href: "https://github.com/shivamr021", icon: <GithubIcon className="w-4 h-4" /> },
+                  { label: "LinkedIn", href: "https://www.linkedin.com/in/shivamrathod021", icon: <LinkedinIcon className="w-4 h-4" /> },
+                  { label: "X (Twitter)", href: "https://x.com/shivamr017", icon: <XIcon className="w-4 h-4" /> },
+                  { label: "Medium", href: "https://medium.com/@shivamr021", icon: <MediumIcon className="w-4 h-4" /> },
+                  { label: "Codolio", href: "https://codolio.com/profile/shivamr021/card", icon: <ExternalLink className="w-4 h-4" /> },
+                ].map((link, idx) => (
+                  <li key={idx}>
+                    <a href={link.href} target="_blank" rel="noreferrer" className="flex items-center gap-4 text-zinc-400 hover:text-white group transition-colors">
+                      <div className="w-10 h-10 rounded-full glass-panel flex items-center justify-center group-hover:border-[#8A2BE2]/50 group-hover:shadow-[0_0_15px_rgba(138,43,226,0.2)] transition-all">
+                        {link.icon}
+                      </div>
+                      <span className="font-medium text-sm">{link.label}</span>
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
 

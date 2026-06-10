@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Network, Server, Bot, Combine, TerminalSquare, Sprout, ExternalLink } from "lucide-react";
 
-// Custom GitHub SVG
+// --- Custom SVG Icon ---
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
     <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
@@ -96,100 +97,67 @@ const projects = [
 ];
 
 export default function WhatIBuild() {
+  const [activeCard, setActiveCard] = useState<number | null>(null);
+
   return (
     <section className="py-20 relative z-10">
       <div className="max-w-7xl mx-auto px-6">
-        
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-12 h-[2px] bg-[#DAA520]"></span>
-            <p className="text-sm uppercase tracking-widest text-[#DAA520] font-bold">Production Systems</p>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Deployed Architecture</h2>
-          <p className="text-lg text-zinc-400 max-w-2xl">
-            A selection of freelance contracts and open-source systems engineered for scale, automation, and real-world utility.
-          </p>
-        </div>
-
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1, duration: 0.4 }}
-              className="glass-panel p-6 rounded-2xl flex flex-col group hover:border-[#8A2BE2]/50 transition-all duration-500 overflow-hidden relative"
+              // 3D Tilt Effect
+              whileHover={{ y: -5, rotateX: 2, rotateY: 2 }}
+              whileTap={{ scale: 0.98 }}
+              // Handle hover/active state logic together
+              onHoverStart={() => setActiveCard(idx)}
+              onHoverEnd={() => setActiveCard(null)}
+              onClick={() => setActiveCard(activeCard === idx ? null : idx)}
+              className={`glass-panel p-6 rounded-2xl flex flex-col transition-all duration-500 overflow-hidden relative cursor-pointer border
+                ${activeCard === idx ? "border-[#8A2BE2]/50 shadow-[0_0_25px_rgba(138,43,226,0.2)]" : "border-white/10"}`}
             >
-              {/* Top Header Row */}
+              {/* Header */}
               <div className="flex items-start justify-between mb-4 relative z-10">
-                <div className="p-3 rounded-lg bg-white/5 group-hover:bg-white/10 transition-colors">
-                  {project.icon}
-                </div>
-                
+                <div className="p-3 rounded-lg bg-white/5">{project.icon}</div>
                 <div className="flex flex-col items-end gap-2">
-                  {/* System Class Badge (Freelance vs Personal) */}
                   <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded border ${project.classColor}`}>
                     {project.class}
                   </span>
-
-                  {/* Links (if they exist) */}
                   {project.links && (
                     <div className="flex gap-2">
-                      {project.links.github && (
-                        <a href={project.links.github} target="_blank" rel="noreferrer" className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 hover:text-[#8A2BE2] transition-colors text-zinc-400">
-                          <GithubIcon className="w-4 h-4" />
-                        </a>
+                       {project.links.github && (
+                        <a href={project.links.github} target="_blank" rel="noreferrer" className="p-1.5 rounded-lg bg-white/5 hover:text-[#8A2BE2] transition-colors"><GithubIcon className="w-4 h-4" /></a>
                       )}
                       {project.links.live && (
-                        <a href={project.links.live} target="_blank" rel="noreferrer" className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 hover:text-[#DAA520] transition-colors text-zinc-400">
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
+                        <a href={project.links.live} target="_blank" rel="noreferrer" className="p-1.5 rounded-lg bg-white/5 hover:text-[#DAA520] transition-colors"><ExternalLink className="w-4 h-4" /></a>
                       )}
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Title & Base Description */}
+              {/* Body */}
               <div className="relative z-10">
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#8A2BE2] transition-colors">{project.title}</h3>
-                <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
-                  {project.desc}
-                </p>
+                <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
+                <p className="text-sm text-zinc-400 mb-6 leading-relaxed">{project.desc}</p>
               </div>
 
-              {/* Dynamic Bottom Section: Tags (Default) -> Highlights (Hover) */}
+              {/* Bullet points logic */}
               <div className="mt-auto relative h-[60px] z-10">
-                
-                {/* Standard Tags - Fade out on hover */}
-                <div className="absolute inset-0 flex flex-wrap gap-2 transition-all duration-300 opacity-100 translate-y-0 group-hover:opacity-0 group-hover:translate-y-4">
+                <div className={`absolute inset-0 flex flex-wrap gap-2 transition-all duration-300 ${activeCard === idx ? "opacity-0 -translate-y-4" : "opacity-100 translate-y-0"}`}>
                   {project.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="text-[11px] font-mono text-zinc-300 bg-black/40 border border-white/10 px-2 py-1 rounded-md h-fit">
-                      {tag}
-                    </span>
+                    <span key={tIdx} className="text-[11px] font-mono text-zinc-300 bg-black/40 border border-white/10 px-2 py-1 rounded-md h-fit">{tag}</span>
                   ))}
                 </div>
-
-                {/* Deep Context Highlights - Fade in on hover */}
-                <div className="absolute inset-0 transition-all duration-300 opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 flex flex-col justify-center">
+                <div className={`absolute inset-0 transition-all duration-300 flex flex-col justify-center ${activeCard === idx ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
                   <ul className="space-y-1.5 border-l-2 border-[#8A2BE2]/50 pl-3">
-                    {project.highlights.map((highlight, hIdx) => (
-                      <li key={hIdx} className="text-xs text-zinc-300 font-medium leading-snug">
-                        {highlight}
-                      </li>
-                    ))}
+                    {project.highlights.map((h, i) => <li key={i} className="text-xs text-zinc-300 font-medium leading-snug">{h}</li>)}
                   </ul>
                 </div>
-
               </div>
-              
-              {/* Subtle background glow on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#8A2BE2]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </motion.div>
           ))}
         </div>
-
       </div>
     </section>
   );
