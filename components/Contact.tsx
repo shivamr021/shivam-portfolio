@@ -175,7 +175,6 @@ export default function Contact() {
 
             <div className="mt-20 pt-8 border-t border-white/10 text-zinc-500 text-sm flex flex-col md:flex-row items-center justify-between">
               <p>© {new Date().getFullYear()} Shivam Rathod. All rights reserved.</p>
-              <p className="mt-2 md:mt-0">Architected in Khargone, MP.</p>
             </div>
           </div>
 
