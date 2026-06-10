@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Shivam Rathod | AI Systems Engineer",
     description: "Production-ready AI/ML systems and backend architecture.",
-    url: "https://your-portfolio-url.vercel.app", // Replace with your final Vercel URL
+    url: "https://shivam-vision.vercel.app/",
     siteName: "Shivam Rathod Portfolio",
     locale: "en_US",
     type: "website",
