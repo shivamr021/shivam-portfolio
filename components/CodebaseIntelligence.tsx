@@ -55,7 +55,7 @@ const features = {
   }
 };
 
-export default function RepoMindShowcase() {
+export default function CodebaseIntelligenceShowcase() {
   const [activeTab, setActiveTab] = useState<keyof typeof features>("chat");
 
   return (
@@ -69,13 +69,13 @@ export default function RepoMindShowcase() {
               <span className="w-12 h-[2px] bg-[#8A2BE2]"></span>
               <p className="text-sm uppercase tracking-widest text-[#8A2BE2] font-bold">Flagship System</p>
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">Codebase.<span className="text-[#34d399]">Intel</span></h2>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">Codebase.<span className="text-[#34d399]">Intelligence</span></h2>
             <p className="text-lg text-zinc-400 leading-relaxed">
-              From <span className="text-[#34d399]">git clone</span> to deep understanding. RepoMind combines vector embeddings with LLM reasoning to transform repositories into self-documenting knowledge bases.
+              From <span className="text-[#34d399]">git clone</span> to deep understanding. Codebase Intelligence combines vector embeddings with LLM reasoning to transform repositories into self-documenting knowledge bases.
             </p>
           </div>
           
-          {/* Action Buttons for RepoMind */}
+          {/* Action Buttons for Codebase Intelligence */}
           <div className="flex items-center gap-3 pb-1">
             <a 
               href="https://codebase-intelligence.shivamrathod145.workers.dev" 
@@ -86,7 +86,7 @@ export default function RepoMindShowcase() {
               <ExternalLink className="w-4 h-4 text-[#34d399]" /> Live System
             </a>
             <a 
-              href="https://github.com/shivamr021/codebase-intelligence" // Replace with exact RepoMind github link if different
+              href="https://github.com/shivamr021/codebase-intelligence" // Replace with exact Codebase Intelligence github link if different
               target="_blank" 
               rel="noreferrer" 
               className="bg-white/10 hover:bg-white/20 border border-white/10 hover:border-[#8A2BE2]/50 text-white px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all"
@@ -133,7 +133,7 @@ export default function RepoMindShowcase() {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
               </div>
-              <p className="text-[10px] md:text-xs font-mono text-zinc-500 tracking-wider uppercase">repomind_engine_v2.sh</p>
+              <p className="text-[10px] md:text-xs font-mono text-zinc-500 tracking-wider uppercase">codebase_intel_engine_v2.sh</p>
             </div>
 
             <div className="p-5 md:p-6 font-mono flex-grow bg-[#0b0f1c]/50">

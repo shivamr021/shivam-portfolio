@@ -100,8 +100,22 @@ export default function WhatIBuild() {
   const [activeCard, setActiveCard] = useState<number | null>(null);
 
   return (
-    <section className="py-20 relative z-10">
+    <section className="py-20 relative z-10" id="systems">
       <div className="max-w-7xl mx-auto px-6">
+        
+        {/* --- RESTORED HEADER SECTION --- */}
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="w-12 h-[2px] bg-[#DAA520]"></span>
+            <p className="text-sm uppercase tracking-widest text-[#DAA520] font-bold">Production Systems</p>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Deployed Architecture</h2>
+          <p className="text-lg text-zinc-400 max-w-2xl">
+            A selection of freelance contracts and open-source systems engineered for scale, automation, and real-world utility.
+          </p>
+        </div>
+        {/* ------------------------------- */}
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, idx) => (
             <motion.div

@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import WhatIBuild from "@/components/WhatIBuild";
-import RepoMindShowcase from "@/components/RepoMindShowcase";
+import CodebaseIntelligenceShowcase from "@/components/CodebaseIntelligence";
 import Advancement from "@/components/Advancement";
 import Contact from "@/components/Contact";
 
@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <RepoMindShowcase />
+      <CodebaseIntelligenceShowcase />
       <WhatIBuild />
       <Advancement />
       <Contact />
